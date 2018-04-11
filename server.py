@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import socket
-import logging
-log = logging.getLogger("Server")
-log.addHandler(logging.StreamHandler())
-log.setLevel(logging.DEBUG)
+from log import get_logger
+
+log = get_logger("Server")
 
 class Server(object):
     """
-    Simple server application.
+    Simple server. The server will receive a message and echo it back to the client.
     """
 
     def __init__(self, address, port):
@@ -21,14 +20,12 @@ class Server(object):
         self.socket.bind((self.address, self.port))
         self.socket.listen(1)
 
-    def start(self):
-        log.info("Started listening on %s:%s." % (self.address, self.port))
+    def start_listening(self):
         self.listen()
-
+        log.info("Started listening on %s:%s." % (self.address, self.port))
         while True:
-            log.info("Started waiting for connection.")
-            self.socket.accept()
             try:
+                log.info("Waiting for connection.")
                 client_socket, client_address = self.socket.accept()
                 log.info("Connection received from %s." % str(client_address))
                 while True:
@@ -37,19 +34,21 @@ class Server(object):
                         break
                     log.info("Received: %s" % data)
                     client_socket.sendall(data)
+                    log.info("Echoed back to client.")
                 log.info("Connection closed to %s." % str(client_address))
             except:
                 raise
 
-    def stop(self):
+    def close(self):
         self.socket.close()
+        log.info("Closed socket.")
 
 
 if __name__ == "__main__":
     server = Server("", 9999)
     try:
-        server.start()
+        server.start_listening()
     except (KeyboardInterrupt, SystemExit):
-        server.stop()
+        server.close()
     finally:
-        server.stop()
+        server.close()
