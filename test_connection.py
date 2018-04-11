@@ -13,10 +13,10 @@ class ServerThread(threading.Thread):
         self.server = Server(address, port)
 
     def run(self):
-        super(ServerThread, self).__init__()
         self.server.start_listening()
 
     def join(self, timeout=None):
+        super(ServerThread, self).join(timeout)
         self.server.close()
 
 
@@ -33,8 +33,6 @@ class TestServer(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         self.server_thread.join()
-        while self.server_thread.isAlive():
-            pass
         self.server_thread = None
 
     def get_client(self):
@@ -42,7 +40,7 @@ class TestServer(unittest.TestCase):
 
     def test_write_read_data_on_server(self):
         """ Send message to server and read the response """
-        message = b"hello server"
+        message = b"Let the Source be with you"
         client = self.get_client()
         client.connect()
         client.send(message)

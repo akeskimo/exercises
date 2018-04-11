@@ -13,15 +13,15 @@ class Client:
     """
 
     def __init__(self, host, port):
-        self._host = host or "localhost"
-        self._port = port
-        self._msg_len = 0
+        self.host = host or "127.0.0.1"
+        self.port = port
+        self.msg_len = 0
 
     def connect(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         for retry in range(3, 1, -1):
             try:
-                self.socket.connect((self._host, self._port))
+                self.socket.connect((self.host, self.port))
                 return
             except ConnectionRefusedError:
                 sleep(1)
@@ -29,12 +29,12 @@ class Client:
 
     def send(self, message):
         self.socket.sendall(message)
-        self._msg_len = len(message)
+        self.msg_len = len(message)
 
     def receive(self):
         data = b""
         length = 0
-        while length < self._msg_len:
+        while length < self.msg_len:
             try:
                 recvd = self.socket.recv(32)
                 if not recvd:
@@ -43,7 +43,7 @@ class Client:
                 length += len(data)
             except:
                 raise
-        self._msg_len = 0
+        self.msg_len = 0
         return data
 
     def close(self):

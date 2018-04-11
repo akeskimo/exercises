@@ -12,26 +12,28 @@ class Server(object):
     """
 
     def __init__(self, address, port):
-        self.address = address or "localhost"
+        self.address = address or "127.0.0.1"
         self.port = port
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def listen(self):
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind((self.address, self.port))
         self.socket.listen(1)
 
     def start_listening(self):
         self.listen()
-        while True:
-            try:
-                client_socket, client_address = self.socket.accept()
-                while True:
-                    data = client_socket.recv(32)
-                    if not data:
-                        break
-                    client_socket.sendall(data)
-            except:
-                raise
+        log.info("Started listening on %s." % (str((self.address, self.port))))
+        try:
+            client_socket, client_address = self.socket.accept()
+            log.info("Received connection %s." % str(client_address))
+            while True:
+                data = client_socket.recv(32)
+                if not data:
+                    break
+                client_socket.sendall(data)
+            client_socket.close()
+        except:
+            raise
 
     def close(self):
         self.socket.close()
