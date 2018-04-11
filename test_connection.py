@@ -41,7 +41,7 @@ class TestServer(unittest.TestCase):
         return Client(self.address, self.port)
 
     def test_write_read_data_on_server(self):
-        """ Send simple message to server and read the response """
+        """ Send message to server and read the response """
         message = b"hello server"
         client = self.get_client()
         client.connect()
