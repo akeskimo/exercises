@@ -29,6 +29,7 @@ class Client:
 
     def send(self, message):
         self.socket.sendall(message)
+        log.info("Sent to server: %s" % message)
         self.msg_len = len(message)
 
     def receive(self):
@@ -36,9 +37,10 @@ class Client:
         length = 0
         while length < self.msg_len:
             try:
-                recvd = self.socket.recv(32)
+                recvd = self.socket.recv(1024)
                 if not recvd:
                     break
+                log.info("Received from server: %s" % recvd)
                 data += recvd
                 length += len(data)
             except:

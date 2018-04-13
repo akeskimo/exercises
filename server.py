@@ -27,10 +27,12 @@ class Server(object):
             client_socket, client_address = self.socket.accept()
             log.info("Received connection %s." % str(client_address))
             while True:
-                data = client_socket.recv(32)
+                data = client_socket.recv(1024)
                 if not data:
                     break
+                log.info("Received from client: %s" % data)
                 client_socket.sendall(data)
+                log.info("Echoed back to client: %s" % data)
             client_socket.close()
         except:
             raise
