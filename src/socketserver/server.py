@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import threading
 import socket
-from log import get_logger
+from utils.log import get_logger
 log = get_logger("Server")
 
 
-class Server(object):
+class Server(threading.Thread):
     """
-    Socket server that will echo received message back to the client.
+    Socket echo server that sends received message back to the client.
     """
 
     def __init__(self, address, port):
+        super(Server, self).__init__()
         self.address = address or "127.0.0.1"
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19,23 +21,28 @@ class Server(object):
     def listen(self):
         self.socket.bind((self.address, self.port))
         self.socket.listen(1)
+        log.debug("Listening on %s" % str((self.address, self.port)))
 
     def start_listening(self):
         self.listen()
-        log.info("Started listening on %s." % (str((self.address, self.port))))
         try:
             client_socket, client_address = self.socket.accept()
-            log.info("Received connection %s." % str(client_address))
+            log.debug("Client connected: %s" % str(client_address))
             while True:
                 data = client_socket.recv(1024)
                 if not data:
                     break
-                log.info("Received from client: %s" % data)
+                log.debug("Received message: %s" % data)
                 client_socket.sendall(data)
-                log.info("Echoed back to client: %s" % data)
+                log.debug("Echo message: %s" % data)
             client_socket.close()
         except:
             raise
 
-    def close(self):
+    def run(self):
+        self.start_listening()
+
+    def join(self, timeout=None):
+        super(Server, self).join(timeout)
         self.socket.close()
+        log.debug("%s has stopped listening" % str((self.address, self.port)))

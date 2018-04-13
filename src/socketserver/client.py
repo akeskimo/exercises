@@ -3,7 +3,7 @@
 
 import socket
 from time import sleep
-from log import get_logger
+from utils.log import get_logger
 log = get_logger("Client")
 
 
@@ -22,14 +22,15 @@ class Client:
         for retry in range(3, 1, -1):
             try:
                 self.socket.connect((self.host, self.port))
+                log.debug("%s has connected" % str((self.host, self.port)))
                 return
             except ConnectionRefusedError:
                 sleep(1)
-        raise ConnectionRefusedError("Unable to connect to server.")
+        raise ConnectionRefusedError("Unable to connect to server")
 
     def send(self, message):
         self.socket.sendall(message)
-        log.info("Sent to server: %s" % message)
+        log.debug("Sent message: %s" % message)
         self.msg_len = len(message)
 
     def receive(self):
@@ -40,7 +41,7 @@ class Client:
                 recvd = self.socket.recv(1024)
                 if not recvd:
                     break
-                log.info("Received from server: %s" % recvd)
+                log.debug("Received echo: %s" % recvd)
                 data += recvd
                 length += len(data)
             except:
@@ -50,3 +51,4 @@ class Client:
 
     def close(self):
         self.socket.close()
+        log.debug("%s has disconnected" % str((self.host, self.port)))
