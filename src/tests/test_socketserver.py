@@ -23,13 +23,10 @@ class TestServer(unittest.TestCase):
         self.server.join()
         self.server = None
 
-    def get_client(self):
-        return Client(self.address, self.port)
-
     def test_write_read_message(self):
         """ Send message to server and verify reply. """
         message = b"Let the Open-Source be with you"
-        client = self.get_client()
+        client = Client(self.address, self.port)
         client.connect()
         client.send(message)
         received = client.receive()
@@ -42,7 +39,7 @@ class TestServer(unittest.TestCase):
         # TODO What went wrong with this test? How would you modify the tests / classes so that it would work as expected?
 
         fmt = b"Client %d says hello"
-        clients = [(self.get_client(), fmt % i) for i in range(5)]
+        clients = [(Client(self.address, self.port), fmt % i) for i in range(5)]
         for (client, message) in clients:
             client.connect()
             client.send(message)
