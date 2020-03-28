@@ -36,8 +36,6 @@ class TestServer(unittest.TestCase):
     def test_write_read_message_with_multiple_clients(self):
         """ Send message to a server from multiple clients and verify replies. """
 
-        # TODO What went wrong with this test? How would you modify the tests / classes so that it would work as expected?
-
         fmt = b"Client %d says hello"
         clients = [(Client(self.address, self.port), fmt % i) for i in range(5)]
         for (client, message) in clients:
