@@ -24,12 +24,14 @@ skills. Follow the instructions below and try to solve the problems.
 
 # Exercise 1 - socketserver
 
-The socket server has client and server implementation in the source
-folder, but there is a design flaw in the server. In order to help
-debugging the problem, you may execute unit tests and possibly
-find out a solution to fix it:
+The socket server has client and server implementation, but there is a design
+flaw that causes the socketserver test to deadlock.
 
-$ src/tests/test_socketserver.py
+Q1: Why does the test hang?
+
+Q2: How would you modify tests and/or the implementation so that multiple clients can connect to the server?
+
+Q3: Can you make the server to support multiple client connections simultaneously and write a test for it?
 
 
 # Exercise 2 - multithread
@@ -43,11 +45,11 @@ $ src/multithread/encryption.py
 
 # Handover
 
-After you have completed the exercises, it is recommended to send
-them back in tar.gz format.
+After you have completed the exercises, you can send
+the result back as tar.gz (eg. git-archive).
 
 
 # Help
 
 If you face problems or come up with questions, you may contact
-aapo.keskimolo@qt.io.
+aapokesk@gmail.com.
