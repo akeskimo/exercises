@@ -1,4 +1,4 @@
-# Qt-Company Python Exercise 2019
+# Python Exercise
 
 
 # About This Repository
