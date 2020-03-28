@@ -9,5 +9,4 @@ def get_logger(name):
     handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s:%(module)s(%(process)d): %(message)s"))
     log.addHandler(handler)
-    log.setLevel(logging.DEBUG)
     return log
