@@ -33,6 +33,10 @@ Q2: How would you modify tests and/or the implementation so that multiple client
 
 Q3: Can you make the server to support multiple client connections simultaneously and write a test for it?
 
+Hint: To run test in debug mode:
+
+ $ env DEBUG=1 src/tests/test_socketserver.py -v
+
 
 # Exercise 2 - multithread
 
